@@ -1,0 +1,43 @@
+
+{% include 'base_head.html' %}
+<div class="container">
+  <header class="header">
+    <h1>Settings</h1>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/report">Reports</a>
+      <a href="/logout" class="btn">Logout</a>
+    </nav>
+  </header>
+
+  <main class="card" style="max-width:700px;margin:24px auto;">
+    <h2>Monthly Income & Category Limits</h2>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-list">
+        {% for cat,msg in messages %}
+          <div class="flash {{cat}}">{{msg}}</div>
+        {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    <form method="post" class="form">
+      <label>Monthly Income
+        <input name="income" type="number" step="0.01" value="{{ user.income or 0 }}" required>
+      </label>
+      <h3>Category Limits (monthly)</h3>
+      {% for c in categories %}
+        <label>{{c}} Limit
+          <input name="limit_{{c}}" type="number" step="0.01" value="{{ user.limits.get(c,0) if user.limits else 0 }}">
+        </label>
+      {% endfor %}
+      <div style="margin-top:12px">
+        <button class="btn primary">Save Settings</button>
+      </div>
+    </form>
+  </main>
+
+  <footer class="footer">Settings saved to your account.</footer>
+</div>
+</body>
+</html>
