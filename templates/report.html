@@ -1,0 +1,87 @@
+
+{% include 'base_head.html' %}
+<div class="container">
+  <header class="header">
+    <h1>Reports</h1>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/settings">Settings</a>
+      <a href="/logout" class="btn">Logout</a>
+    </nav>
+  </header>
+
+  <main class="report-grid">
+    <section class="card">
+      <h2>Summary</h2>
+      <div id="summary">
+        <p>Total spent: <strong id="total">₹0</strong></p>
+        <p>This month spent: <strong id="this_month">₹0</strong></p>
+        <p>Income: <strong id="income">₹0</strong></p>
+        <p>Savings: <strong id="savings">₹0</strong></p>
+        <p>Highest expense: <strong id="highest">—</strong></p>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Spending by Category</h2>
+      <canvas id="catChart" height="200"></canvas>
+      <div id="limits"></div>
+    </section>
+
+    <section class="card">
+      <h2>Spending by Month</h2>
+      <canvas id="monthChart" height="200"></canvas>
+    </section>
+
+    <section class="card">
+      <h2>Expense Details</h2>
+      <div id="details"></div>
+    </section>
+  </main>
+
+  <footer class="footer">Reports generated live from your data.</footer>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  async function fetchData(){
+    const res = await fetch('/api/data');
+    const data = await res.json();
+    document.getElementById('total').innerText = '₹ ' + (data.total||0).toFixed(2);
+    document.getElementById('this_month').innerText = '₹ ' + (data.spent_this_month||0).toFixed(2);
+    document.getElementById('income').innerText = '₹ ' + (data.income||0).toFixed(2);
+    document.getElementById('savings').innerText = '₹ ' + (data.savings||0).toFixed(2);
+    if(data.highest){ document.getElementById('highest').innerText = data.highest.title + ' — ₹' + data.highest.amount.toFixed(2); }
+    // category chart
+    const catLabels = Object.keys(data.by_category);
+    const catValues = Object.values(data.by_category);
+    new Chart(document.getElementById('catChart'), {
+      type: 'doughnut',
+      data: { labels: catLabels, datasets: [{ data: catValues }] },
+    });
+    // month chart
+    const monLabels = Object.keys(data.by_month).sort();
+    const monValues = monLabels.map(k=>data.by_month[k]);
+    new Chart(document.getElementById('monthChart'), {
+      type: 'line',
+      data: { labels: monLabels, datasets: [{ label: 'Spent', data: monValues, fill: true }] },
+    });
+    // limits display + warnings
+    const limits = data.limits || {};
+    const limitsDiv = document.getElementById('limits');
+    limitsDiv.innerHTML = '<h4>Limits</h4>' + Object.keys(limits).map(k=>{
+      const spent = data.by_category[k]||0;
+      const limit = limits[k]||0;
+      const pct = limit>0 ? (spent/limit*100).toFixed(0) : '—';
+      const warn = limit>0 && spent>limit ? '<span class="warn"> (Exceeded)</span>' : '';
+      return `<div>${k}: ₹${spent.toFixed(2)} / ₹${limit.toFixed(2)} — ${pct}% ${warn}</div>`;
+    }).join('');
+    // details
+    const details = document.getElementById('details');
+    details.innerHTML = '<table class="expenses-table"><thead><tr><th>Title</th><th>Amt</th><th>Cat</th><th>Date</th></tr></thead><tbody>' +
+      data.expenses.map(e=>`<tr><td>${e.title}</td><td>₹${e.amount.toFixed(2)}</td><td>${e.category}</td><td>${e.created_at}</td></tr>`).join('') +
+      '</tbody></table>';
+  }
+  fetchData();
+</script>
+</body>
+</html>
