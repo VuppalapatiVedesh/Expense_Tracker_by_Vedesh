@@ -1,25 +1,109 @@
+# 💰 Expense Tracker (Flask Web Application)
 
-Expense Tracker v2 (Flask) — Login, Multi-user, Category limits, Savings
----------------------------------------------------------------------
-What's new:
-- User signup/login with username + password (hashed)
-- Multiple users: each user has separate expenses and settings
-- Settings page: set monthly income and per-category limits
-- Savings calculation (income - this month's spending)
-- Limits shown in reports and warnings when exceeded
+A modern **Expense Tracker Web App** built using **Python, Flask, SQLite, HTML, CSS, and JavaScript**.  
+This application helps users **track their expenses, analyze spending habits, and manage their monthly budget efficiently.**
 
-How to run:
-1. Create a virtualenv and activate it.
-   python -m venv venv
-   source venv/bin/activate   # mac/linux
-   venv\Scripts\activate    # windows
-2. Install requirements:
-   pip install -r requirements.txt
-3. Run the app:
-   python app.py
-4. Open http://127.0.0.1:5000 in your browser.
+---
 
-Notes:
-- The app creates 'expenses_v2.db' SQLite file in the project folder.
-- Default categories: Food, Travel, Bills, Shopping, Health, Other
-- For demo: sign up as a new user then add expenses & set limits.
+## 🚀 Features
+
+### 🔐 User Authentication
+- User Signup
+- User Login
+- Secure Password Hashing
+- Logout functionality
+
+### 💳 Expense Management
+- Add new expenses
+- Delete expenses
+- Categorize expenses
+- Add optional notes
+- Track date and time of expenses
+
+### 📊 Reports & Analytics
+- Total spending overview
+- Monthly expense tracking
+- Category-wise spending chart
+- Highest expense detection
+- Detailed expense table
+
+### 💰 Budget Management
+- Set monthly income
+- Set spending limits per category
+- Automatic savings calculation
+
+### 📁 Export Data
+- Export all expenses to **CSV format**
+
+---
+
+## 🛠️ Technologies Used
+
+| Technology | Purpose             |
+|------------|---------------------|
+| Python     | Backend Programming |
+| Flask      | Web Framework       |
+| SQLite     | Database            |
+| HTML       | Structure           |
+| CSS        | Styling             |
+| JavaScript | Frontend logic      |
+| Chart.js   | Data visualization  |
+
+---
+
+## 📂 Project Structure
+
+```
+Expense-Tracker
+│
+├── static
+│   ├── app.js
+│   └── style.css
+│
+├── templates
+│   ├── auth.html
+│   ├── base_head.html
+│   ├── index.html
+│   ├── report.html
+│   └── settings.html
+│
+├── app.py
+├── expenses_v2.db
+├── requirements.txt
+└── README.md
+```
+
+
+## 📊 Application Pages
+
+- Login / Signup Page
+- Expense Dashboard
+- Reports & Charts Page
+- Settings Page
+
+---
+
+## 🔒 Security
+
+- Passwords are stored using **secure hashing**
+- Session-based user authentication
+- Each user's expenses are stored separately
+
+---
+
+## 📌 Future Improvements
+
+- Edit expenses feature
+- Search and filter expenses
+- Dark / Light theme toggle
+- Mobile responsive improvements
+- AI-based spending insights
+
+---
+
+## 👨‍💻 Author
+
+**Vedesh Vuppalapati**
+
+---
+
